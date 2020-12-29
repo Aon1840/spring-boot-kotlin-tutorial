@@ -38,6 +38,19 @@ class TodoController {
         todoList.add(Todo(COUNTER.getAndIncrement(), todo.name))
     }
 
+    // ========== PUT METHOD ==========
+    @PutMapping("/todo")
+    fun update(@RequestBody todo: Todo) {
+        todo.id?.toInt()?.let { id ->
+            todoList[id].name = todo.name
+        }
+    }
+
+    @PutMapping("/todo/{id}")
+    fun updateById(@PathVariable id: Long, @RequestBody todo: Todo) {
+        todoList[id.toInt()].name = todo.name
+    }
+
     companion object {
         private var COUNTER = AtomicLong()
     }
