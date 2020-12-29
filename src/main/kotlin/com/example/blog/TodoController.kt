@@ -51,6 +51,19 @@ class TodoController {
         todoList[id.toInt()].name = todo.name
     }
 
+    // ========== DELETE METHOD ==========
+    @DeleteMapping("/delete")
+    fun delete(@RequestBody todo: Todo) {
+        todo.id?.toInt()?.let { id ->
+            todoList.removeAt(id)
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    fun deleteById(@PathVariable id: Long, @RequestBody todo: Todo) {
+        todoList.removeAt(id.toInt())
+    }
+
     companion object {
         private var COUNTER = AtomicLong()
     }
