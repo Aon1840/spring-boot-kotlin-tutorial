@@ -1,42 +1,44 @@
 package com.example.blog
 
 import Todo
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+import java.util.concurrent.atomic.AtomicLong
 
 @RestController
 class TodoController {
 
-    private var todoList: List<Todo>? = null
+    private var todoList = ArrayList<Todo>()
 
-    init {
-        todoList = listOf(
-                Todo(1, "attapon"),
-                Todo(2, "attaporn"),
-                Todo(3, "natnicha"))
-    }
-
-    @GetMapping("/todos")
-    fun getTodo(): String {
-        return "todos"
+    // ========== GET METHOD ==========
+    @GetMapping("/test")
+    fun getTest(): String {
+        return "Test"
     }
 
     @GetMapping("/todo")
-    fun getTodos(): List<Todo>? {
+    fun getTodos(): ArrayList<Todo>? {
         return todoList
     }
 
     // path
     @GetMapping("/todo/{id}")
     fun getTodoById(@PathVariable id: Long): Todo? {
-        return todoList?.find { it.id == id }
+        return todoList.find { it.id == id }
     }
 
     // query string
     @GetMapping("/todo/search")
     fun getTodoByName(@RequestParam(defaultValue = "natnicha") name: String): Todo? {
-        return todoList?.find { it.name == name }
+        return todoList.find { it.name == name }
+    }
+
+    // ========== POST METHOD ==========
+    @PostMapping("/todo")
+    fun addTodo(@RequestBody todo: Todo) {
+        todoList.add(Todo(COUNTER.getAndIncrement(), todo.name))
+    }
+
+    companion object {
+        private var COUNTER = AtomicLong()
     }
 }
